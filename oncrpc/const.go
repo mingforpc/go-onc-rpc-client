@@ -4,6 +4,9 @@ package oncrpc
 // this is the max size of a fragment
 const MaxRecordFragmentSize = (1 << 31) - 1
 
+// MaxReadSize Max read size
+const MaxReadSize = MaxRecordFragmentSize
+
 // RPCVERS rpc version
 const RPCVERS uint32 = 2
 

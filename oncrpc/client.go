@@ -4,6 +4,8 @@ import (
 	"encoding/binary"
 	"io"
 	"net"
+
+	"github.com/rasky/go-xdr/xdr"
 )
 
 // Client onc rpc client
@@ -95,8 +97,21 @@ func (c *Client) Call(xid uint32, proc uint32, procParams interface{}) error {
 
 // ReadObj read data to an object
 func (c *Client) ReadObj(obj interface{}) (*MsgReply, error) {
-	// TODO:
-	return nil, nil
+
+	msg, reader, err := c.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	buf := make([]byte, MaxReadSize)
+	n, err := reader.Read(buf)
+	if err != nil {
+		return nil, err
+	}
+
+	xdr.Unmarshal(buf[:n], &obj)
+
+	return msg, nil
 }
 
 // ReadHeader read ONC RPC header from conn
